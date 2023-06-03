@@ -1,5 +1,7 @@
 import mongoose from "mongoose";
+
 import { Password } from "../services/password";
+const crypto = require("crypto");
 
 interface UserAttrs {
   email: string;
@@ -15,6 +17,7 @@ interface UserDoc extends mongoose.Document {
   email: string;
   password: string;
   name: string;
+  publicId: string;
 }
 
 const userSchema = new mongoose.Schema(
@@ -30,6 +33,10 @@ const userSchema = new mongoose.Schema(
     name: {
       type: String,
       required: true,
+    },
+    publicId: {
+      type: String,
+      required: false,
     },
   },
   {
@@ -49,6 +56,8 @@ userSchema.pre("save", async function (done) {
     const hashed = await Password.toHash(this.get("password"));
     this.set("password", hashed);
   }
+  this.publicId = crypto.randomBytes(16).toString("hex");
+
   done();
 });
 
