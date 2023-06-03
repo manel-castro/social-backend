@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
 
-interface BoardAttrs {
+export interface BoardAttrs {
   userId: string;
   userName: string;
   likes: number;
