@@ -5,6 +5,7 @@ import { errorHandler } from "./common/middlewares/error-handler";
 
 import { userRouter } from "./routes/user";
 import { boardRouter } from "./routes/board/board";
+import { communityRouter } from "./routes/community /community";
 
 const express = require("express");
 
@@ -34,9 +35,10 @@ app.use(
 app.use(currentUser);
 
 /**
- * Pou Routers
+ * Social Routers
  */
 app.use(boardRouter);
+app.use(communityRouter);
 
 /**
  * User Routers

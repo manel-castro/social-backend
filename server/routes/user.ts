@@ -21,6 +21,7 @@ router.post(
   "/api/users/signup",
   [
     body("email").isEmail().withMessage("Email must be valid"),
+    body("name").isString().withMessage("Name must be valid"),
     body("password")
       .trim()
       .isLength({ min: 4, max: 20 })
@@ -28,7 +29,7 @@ router.post(
   ],
   validateRequest,
   async (req: Request, res: Response, next: NextFunction) => {
-    const { email, password } = req.body;
+    const { email, password, name } = req.body;
 
     const existingUser = await User.findOne({ email });
 
@@ -36,7 +37,7 @@ router.post(
       return next(new BadRequestError("Email in use"));
     }
 
-    const user = User.build({ email, password });
+    const user = User.build({ email, password, name });
     await user.save();
 
     const userJwt = jwt.sign(

@@ -4,6 +4,7 @@ import { Password } from "../services/password";
 interface UserAttrs {
   email: string;
   password: string;
+  name: string;
 }
 
 interface UserModel extends mongoose.Model<UserDoc> {
@@ -13,6 +14,7 @@ interface UserModel extends mongoose.Model<UserDoc> {
 interface UserDoc extends mongoose.Document {
   email: string;
   password: string;
+  name: string;
 }
 
 const userSchema = new mongoose.Schema(
@@ -22,6 +24,10 @@ const userSchema = new mongoose.Schema(
       required: true,
     },
     password: {
+      type: String,
+      required: true,
+    },
+    name: {
       type: String,
       required: true,
     },
