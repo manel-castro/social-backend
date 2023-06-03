@@ -2,8 +2,9 @@ import cookieSession from "cookie-session";
 import cors from "cors";
 import { currentUser } from "./common/middlewares/current-user";
 import { errorHandler } from "./common/middlewares/error-handler";
-import { pouRouter } from "./routes/pou/pou";
+
 import { userRouter } from "./routes/user";
+import { boardRouter } from "./routes/board/board";
 
 const express = require("express");
 
@@ -35,7 +36,7 @@ app.use(currentUser);
 /**
  * Pou Routers
  */
-app.use(pouRouter);
+app.use(boardRouter);
 
 /**
  * User Routers
