@@ -2,27 +2,31 @@ import mongoose from "mongoose";
 import { app } from "./app";
 
 process.env.JWT_KEY = "JSON_WEB_TOKEN_KEY";
+const DEVELOPMENT = true;
 
 const start = async () => {
   /**
    * MongoDB Atlas conection
    */
   try {
-    await mongoose.connect(
-      // "mongodb+srv://cluster0.bzo9wnv.mongodb.net/?authSource=%24external&authMechanism=MONGODB-X509&retryWrites=true&w=majority",
-      "mongodb+srv://cluster0.bzo9wnv.mongodb.net/?authSource=%24external&authMechanism=MONGODB-X509&retryWrites=true&w=majority",
-      {
-        ssl: true,
-        sslValidate: true,
-        // For example, see https://medium.com/@rajanmaharjan/secure-your-mongodb-connections-ssl-tls-92e2addb3c89
-        // for where the `rootCA.pem` file comes from.
-        // Please note that, in Mongoose >= 5.8.3, `sslCA` needs to be
-        // the **path to** the CA file, **not** the contents of the CA file
-        // sslCA: `${__dirname}/mongo-cert.cer`,
-        sslKey: `${__dirname}/assets/mongo-cert.cer`,
-        sslCert: `${__dirname}/assets/mongo-cert.cer`,
-      }
-    );
+    if (DEVELOPMENT) {
+      await mongoose.connect("mongodb://127.0.0.1:27017");
+    } else {
+      await mongoose.connect(
+        "mongodb+srv://cluster0.bzo9wnv.mongodb.net/?authSource=%24external&authMechanism=MONGODB-X509&retryWrites=true&w=majority",
+        {
+          ssl: true,
+          sslValidate: true,
+          // For example, see https://medium.com/@rajanmaharjan/secure-your-mongodb-connections-ssl-tls-92e2addb3c89
+          // for where the `rootCA.pem` file comes from.
+          // Please note that, in Mongoose >= 5.8.3, `sslCA` needs to be
+          // the **path to** the CA file, **not** the contents of the CA file
+          // sslCA: `${__dirname}/mongo-cert.cer`,
+          sslKey: `${__dirname}/assets/mongo-cert.cer`,
+          sslCert: `${__dirname}/assets/mongo-cert.cer`,
+        }
+      );
+    }
     console.log("Connected to mongodb");
   } catch (e) {
     console.log("error: ", e);
