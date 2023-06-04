@@ -5,6 +5,7 @@ export interface BoardAttrs {
   userName: string;
   likes: number;
   postMessage: string;
+  userPublicId: string;
 }
 
 interface BoardModel extends mongoose.Model<BoardDoc> {
@@ -16,6 +17,7 @@ export interface BoardDoc extends mongoose.Document {
   userName: string;
   likes: number;
   postMessage: string;
+  userPublicId: string;
 }
 
 const boardSchema = new mongoose.Schema(
@@ -33,6 +35,10 @@ const boardSchema = new mongoose.Schema(
       required: true,
     },
     postMessage: {
+      type: String,
+      required: true,
+    },
+    userPublicId: {
       type: String,
       required: true,
     },

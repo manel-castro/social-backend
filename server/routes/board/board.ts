@@ -3,6 +3,9 @@ import { body } from "express-validator";
 import { NotAuthorizedError } from "../../common/errors/not-authorized-error";
 import { validateRequest } from "../../common/middlewares/validate-request";
 import { Board, BoardAttrs, BoardDoc } from "../../models/board";
+import { User } from "../../models/user";
+import { RequestValidationError } from "../../common/errors/request-validation-error";
+import { BadRequestError } from "../../common/errors/bad-request-error";
 
 const express = require("express");
 
@@ -27,23 +30,38 @@ router.get(
 );
 router.post(
   "/board",
+  [
+    body("postMessage")
+      .isString()
+      .isLength({ min: 2, max: 200 })
+      .withMessage("Invalid postMessage from validator"),
+  ],
+  validateRequest,
   async (req: Request, res: Response, next: NextFunction) => {
     const { currentUser } = req;
     if (!currentUser) {
       return next(new NotAuthorizedError());
     }
-    const postMessage = req.body.postMessage;
-    if (!postMessage) return;
-
     const userId = currentUser.id;
-    const userName = currentUser.email;
+    const user = await User.findById(currentUser.id);
+    if (!user) {
+      return next(new NotAuthorizedError());
+    }
+
+    if (!req.body.postMessage) {
+      return next(new BadRequestError("Invalid postMessage"));
+    }
+
+    const userName = user.name;
+    const publicId = user.publicId;
     const likes = 0;
 
     const board = Board.build({
       userId,
       likes,
       userName,
-      postMessage,
+      postMessage: req.body.postMessage,
+      userPublicId: publicId,
     });
     await board.save();
 
