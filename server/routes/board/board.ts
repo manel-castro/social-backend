@@ -34,7 +34,7 @@ router.post(
     body("postMessage")
       .isString()
       .isLength({ min: 2, max: 200 })
-      .withMessage("Invalid postMessage from validator"),
+      .withMessage("Invalid Message"),
   ],
   validateRequest,
   async (req: Request, res: Response, next: NextFunction) => {
