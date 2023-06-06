@@ -42,8 +42,8 @@ router.post(
     if (!currentUser) {
       return next(new NotAuthorizedError());
     }
-    const userId = currentUser.id;
     const user = await User.findById(currentUser.id);
+    const userId = currentUser.id;
     if (!user) {
       return next(new NotAuthorizedError());
     }
